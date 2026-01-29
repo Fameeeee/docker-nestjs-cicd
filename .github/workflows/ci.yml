@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: "${{ github.repository_owner }}"
+
       # 1. ดึงโค้ดจาก GitHub มาที่เครื่องหุ่นยนต์
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,14 +60,13 @@ jobs:
           context: .
           push: true # เปลี่ยนจาก false เป็น true เพื่อส่งขึ้นคลัง
           tags: |
-            ghcr.io/${{ github.repository }}/nestjs-api:latest
-            ghcr.io/${{ github.repository }}/nestjs-api:${{ github.sha }}
-
+            ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/nestjs-api:latest
+            ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/nestjs-api:${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'my-app:latest' # ชื่อ image ที่เรา build เช็กในเครื่องหุ่นยนต์
-          format: 'table'
-          exit-code: '1' # ถ้าเจอช่องโหว่ร้ายแรง (Critical) ให้ทำเครื่องหมายกากบาทสีแดง ❌ ทันที
-          severity: 'CRITICAL,HIGH'
+          image-ref: "my-app:latest" # ชื่อ image ที่เรา build เช็กในเครื่องหุ่นยนต์
+          format: "table"
+          exit-code: "1" # ถ้าเจอช่องโหว่ร้ายแรง (Critical) ให้ทำเครื่องหมายกากบาทสีแดง ❌ ทันที
+          severity: "CRITICAL,HIGH"
