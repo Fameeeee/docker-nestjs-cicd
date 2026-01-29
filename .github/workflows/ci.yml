@@ -4,10 +4,15 @@ name: NestJS Continuous Integration
 on:
   push:
     branches: ["main"]
+  
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Set lower case owner name
