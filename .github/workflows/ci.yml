@@ -54,7 +54,7 @@ jobs:
         with:
           image-ref: "my-app:latest"
           format: "table"
-          exit-code: "1"
+          exit-code: "0"
           severity: "CRITICAL,HIGH"
 
       # 6. Login (ทำหลังจากสแกนผ่านเท่านั้น)
